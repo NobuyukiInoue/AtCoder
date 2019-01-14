@@ -6,6 +6,8 @@ class Solution:
         self.MAX_N = 400
         self.di = [1, 0, -1, 0]
         self.dj = [0, 1, 0, -1]
+        MAX_N = 400
+        self.used = [[0]*MAX_N]*MAX_N
 
     def input(self):
         flds = input().split(' ')
@@ -30,9 +32,6 @@ class Solution:
     def solve(self):
         ans = 0
         b, w = 0, 0
-        MAX_N = 400
-        self.used = [[0]*MAX_N]*MAX_N
-
         for i in range(self.H):
             for j in range(self.W):
                 if self.used[i][j]:
@@ -55,11 +54,11 @@ class Solution:
                             continue
                         ni = ci + self.di[d]
                         nj = cj + self.dj[d]
-
                         if self.used[ni][nj]:
                             continue
-                        
                         self.used[ni][nj] = True
+                        temp_p = [ni, nj]
+                        que.append(temp_p)
                 ans += b * w
         return ans
 
