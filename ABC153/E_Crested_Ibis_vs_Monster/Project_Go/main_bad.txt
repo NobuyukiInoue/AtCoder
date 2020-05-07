@@ -1,0 +1,84 @@
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+
+type sheet struct {
+	index int
+	HP    int
+	MP    int
+	cost  float64
+}
+
+func main() {
+	var h, n int
+
+	fmt.Scan(&h, &n)
+	data := make([]sheet, n)
+	sortedcost := make([]sheet, n)
+	sortedHP := make([]sheet, n)
+	sortedMP := make([]sheet, n)
+
+	for i := 0; i < n; i++ {
+		fmt.Scan(&data[i].HP, &data[i].MP)
+		data[i].index = i
+		data[i].cost = float64(data[i].HP) / float64(data[i].MP)
+	}
+
+	copy(sortedcost, data)
+	sort.Slice(sortedcost, func(i, j int) bool {
+		return sortedcost[i].cost > sortedcost[j].cost
+	})
+	printData(sortedcost)
+
+	copy(sortedHP, data)
+	sort.Slice(sortedHP, func(i, j int) bool {
+		return sortedHP[i].HP < sortedHP[j].HP
+	})
+	printData(sortedHP)
+
+	copy(sortedMP, data)
+	sort.Slice(sortedMP, func(i, j int) bool {
+		return sortedMP[i].MP < sortedMP[j].MP
+	})
+	printData(sortedMP)
+
+	consumMP := 0
+	for h > 0 {
+		for i := 0; i < n; i++ {
+			if h == sortedcost[i].HP {
+				h -= sortedcost[i].HP
+				consumMP += sortedcost[i].MP
+				break
+			}
+		}
+		for i := 0; i < n; i++ {
+			if h >= sortedcost[i].HP {
+				h -= sortedcost[i].HP
+				consumMP += sortedcost[i].MP
+				break
+			} else {
+				for j := 0; j < n; j++ {
+					if h <= sortedMP[j].HP {
+						h -= sortedMP[j].HP
+						consumMP += sortedMP[j].MP
+						break
+					}
+				}
+				break
+			}
+		}
+	}
+	fmt.Println(consumMP)
+}
+
+func printData(data []sheet) {
+	fmt.Printf("index id   HP MP     cost\n")
+	fmt.Printf("-----+----+-----------------\n")
+	for i := 0; i < len(data); i++ {
+		fmt.Printf("[%d] = [%d] (%d, %d) ... %f\n", i, data[i].index, data[i].HP, data[i].MP, data[i].cost)
+	}
+	fmt.Println()
+}

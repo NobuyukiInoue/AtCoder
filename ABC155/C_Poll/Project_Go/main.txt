@@ -1,0 +1,43 @@
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+
+func main() {
+	var n, i int
+
+	fmt.Scan(&n)
+	words := make([]string, n)
+	for i = 0; i < n; i++ {
+		fmt.Scan(&words[i])
+	}
+
+	fmt.Printf("n = %d", n)
+
+	for i = 0; i < n; i++ {
+		fmt.Printf("%s", words[i])
+	}
+
+	sort.Sort(sort.StringSlice(words))
+
+	for i = 0; i < n; i++ {
+		fmt.Printf("%s", words[i])
+	}
+
+	dic := make(map[string]int)
+
+	for _, word := range words {
+		_, ok := dic[word]
+		if ok {
+			dic[word]++
+		} else {
+			dic[word] = 1
+		}
+	}
+
+	for _, word := range dic {
+		fmt.Printf("%d", word)
+	}
+}
